@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getToken } from 'next-auth/jwt';
-import { google } from 'googleapis';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,30 +11,27 @@ export async function GET(req: NextRequest) {
 
     const accessToken = token.accessToken as string;
 
-    const auth = new google.auth.OAuth2();
-    auth.setCredentials({ access_token: accessToken });
+    const headers = new Headers();
+    headers.append('Authorization', `Bearer ${accessToken}`);
+    headers.append('Accept', 'application/json');
 
-    const gmail = google.gmail({ version: 'v1', auth });
+    // Fetch the list of email message IDs
+    const response = await fetch('https://www.googleapis.com/gmail/v1/users/me/messages?maxResults=50', { headers });
+    const data = await response.json();
 
-    const response = await gmail.users.messages.list({
-      userId: 'me',
-      maxResults: 50,
-    });
-
-    if (!response.data.messages) {
+    if (!data.messages) {
       return NextResponse.json([], { status: 204 });
     }
 
-    
-    const emails = await Promise.all(
-      response.data.messages
-        .filter((message) => message.id)
-        .map(async (message) => {
-          const msg = await gmail.users.messages.get({ userId: 'me', id: message.id as string });
-          return msg.data;
-        })
+    // Fetch details for each email using the IDs
+    const emailPromises = data.messages.map((message: { id: string }) =>
+      fetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${message.id}`, { headers })
+        .then((res) => res.json())
     );
 
+    const emails = await Promise.all(emailPromises);
+    console.log(emails);
+    
     return NextResponse.json(emails, { status: 200 });
   } catch (error) {
     console.error('Error fetching emails:', error);
