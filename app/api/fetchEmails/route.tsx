@@ -30,7 +30,6 @@ export async function GET(req: NextRequest) {
     );
 
     const emails = await Promise.all(emailPromises);
-    console.log(emails);
     
     return NextResponse.json(emails, { status: 200 });
   } catch (error) {

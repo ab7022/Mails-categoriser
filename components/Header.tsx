@@ -16,7 +16,7 @@ export default function Header({session}: {session: any}){
         <AvatarFallback>JP</AvatarFallback>
       </Avatar>
           <div className="relative w-full max-w-md">
-        <h4>{session?.user.name} </h4>
+        <h4>{session?.user.name || "Hello User"} </h4>
       
           </div>
         </div>

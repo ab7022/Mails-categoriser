@@ -10,7 +10,6 @@ const Emails = () => {
   const { data: session } = useSession();
   const [emails, setEmails] = useState([]);
   const [category, setCategory] = useState("");
-  console.log(emails);
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -34,7 +33,6 @@ const Emails = () => {
           email: localStorage.getItem("emails"),
         });
         setCategory(response.data);
-        console.log(category);
         localStorage.setItem("categories", JSON.stringify(response.data));
     } catch (error) {
         console.error("Error fetching emails:", error);

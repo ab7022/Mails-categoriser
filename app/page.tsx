@@ -10,9 +10,12 @@ export default function Home() {
   const { data: session } = useSession();
 
   return (
-    <>
+    <div className="h-screen bg-white">
   
       <Header session={session}/>
-    </>
+      <div className="flex justify-center align- items-center">
+      Please Signin First
+      </div>
+    </div>
   );
 }
