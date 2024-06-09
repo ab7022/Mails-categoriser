@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Email({ session, emails, refreshEmails, classifyEmails }) {
   const [emailsToShow, setEmailsToShow] = useState(10);
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "short", day: "numeric" };
     return date.toLocaleDateString(undefined, options);
@@ -15,11 +15,11 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
   const categoriesString = localStorage.getItem("categories");
   const categoriesObject = JSON.parse(categoriesString);
   const categories = categoriesObject?.data.split("\n").map(category => category.split(":")[1].trim());
-  const handleEmailsToShowChange = (event) => {
+  const handleEmailsToShowChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setEmailsToShow(parseInt(event.target.value));
   };
 
-  const getCategoryClass = (category) => {
+  const getCategoryClass = (category: string): string => {
     switch (category.toLowerCase()) {
       case "spam":
         return "bg-red-500 text-white";
@@ -107,20 +107,7 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
                       Content: {email.snippet}
                     </div>
                   </div>
-                  <div className="hidden md:flex flex-col text-center text-sm text-gray-500 dark:text-gray-400">
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {categories && (
-                      <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
-                        {categories[index]}
-                      </div>
-                    )}
-                    
-                    </div>
-                    {formatDate(email.payload.headers.find((header) => header.name === "Date").value)}
-                  </div>
-                  
-                </div>
-              ))
+                  {formatDate((email.payload.headers.find((header: any) => header.name === "Date") as any).value)}
             ) : (
               <p className="text-center flex justify-center items-center">No emails found.</p>
             )}
@@ -131,32 +118,8 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
   );
 }
 
-function ChevronLeftIcon(props) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m15 18-6-6 6-6" />
-    </svg>
-  );
-}
 
-function ChevronRightIcon(props) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m9 18 6-6-6-6" />
-    </svg>
-  );
-}
 
-function ExpandIcon(props) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8" />
-      <path d="M3 16.2V21m0 0h4.8M3 21l6-6" />
-      <path d="M21 7.8V3m0 0h-4.8M21 3l-6 6" />
-      <path d="M3 7.8V3m0 0h4.8M3 3l6 6" />
-    </svg>
-  );
-}
 
 function RefreshCwIcon(props) {
   return (
