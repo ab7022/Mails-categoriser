@@ -11,7 +11,7 @@ interface EmailProps {
 }
 
 export default function Email({ session, emails, refreshEmails, classifyEmails }: EmailProps) {
-  const [emailsToShow, setEmailsToShow] = useState(10);
+  const [emailsToShow, setEmailsToShow] = useState<number>(10); 
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -23,11 +23,11 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
   const categories = categoriesObject?.data.split("\n").map((category: string) => category.split(":")[1].trim());
 
   const handleEmailsToShowChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setEmailsToShow(parseInt(event.target.value));
+    setEmailsToShow(parseInt(event.target.value, 10)); 
   };
 
-  const getCategoryClass = (category: string): string => {
-    switch (category.toLowerCase()) {
+  const getCategoryClass = (category: string | undefined): string => { 
+    switch (category?.toLowerCase()) {
       case "spam":
         return "bg-red-500 text-white";
       case "important":
@@ -90,6 +90,7 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
                       <AvatarImage alt="@username" src="/placeholder-user.jpg" />
                       <AvatarFallback>JP</AvatarFallback>
                     </Avatar>
+                    
                     <div className="flex flex-col md:hidden text-sm text-gray-500 dark:text-gray-400 text-center">
                       {categories && (
                         <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
@@ -101,15 +102,27 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
                   </div>
                   <div className="grid gap-1">
                     <div className="font-medium text-blue-800">
-                      {email.payload.headers.find((header: any) => header.name === "From").value}
+                      {email.payload.headers.find((header: any) => header.name === "From")?.value}
                     </div>
                     <div className="text-sm text-gray-800 dark:text-gray-400">
-                      Subject: {email.payload.headers.find((header: any) => header.name === "Subject").value}
+                      Subject: {email.payload.headers.find((header: any) => header.name === "Subject")?.value}
                     </div>
                     <div className="text-[12px] md:text-sm text-gray-500 dark:text-gray-400">
                       Content: {email.snippet}
                     </div>
                   </div>
+                  <div className="hidden md:flex flex-col text-center text-sm text-gray-500 dark:text-gray-400">
+                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  {categories && (
+                    <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
+                      {categories[index]}
+                    </div>
+                  )}
+                  
+                  </div>
+                  {formatDate(email.payload.headers.find((header:any) => header.name === "Date").value)}
+                </div>
+                
                 </div>
               ))
             ) : (

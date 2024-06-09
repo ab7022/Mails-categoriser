@@ -23,14 +23,17 @@ export async function GET(req: NextRequest) {
     });
 
     if (!response.data.messages) {
-      return NextResponse.json([], { status: 200 });
+      return NextResponse.json([], { status: 204 });
     }
 
+    
     const emails = await Promise.all(
-      response.data.messages.map(async (message) => {
-        const msg = await gmail.users.messages.get({ userId: 'me', id: message.id });
-        return msg.data;
-      })
+      response.data.messages
+        .filter((message) => message.id)
+        .map(async (message) => {
+          const msg = await gmail.users.messages.get({ userId: 'me', id: message.id as string });
+          return msg.data;
+        })
     );
 
     return NextResponse.json(emails, { status: 200 });
