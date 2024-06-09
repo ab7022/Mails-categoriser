@@ -29,6 +29,7 @@ const Emails = () => {
   const classifyEmails = async () => {
     if (session) {
       try {
+        localStorage.removeItem("categories")
         const response = await axios.post("/api/classify", {
           email: localStorage.getItem("emails"),
         });
@@ -43,6 +44,8 @@ const Emails = () => {
     try {
       const response = await axios.get("/api/fetchEmails");
       setEmails(response.data);
+      const snippets = response.data.map((email: any) => email.snippet);
+      localStorage.setItem("emails", JSON.stringify(snippets));
     } catch (error) {
       console.error("Error refreshing emails:", error);
     }
