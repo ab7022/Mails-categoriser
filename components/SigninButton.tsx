@@ -7,7 +7,7 @@ export default function SigninButton() {
       <Button
         className="flex w-full items-center justify-center space-x-2 rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-100 "
         onClick={async () => {
-          await signIn("google",{callbackUrl:"/emails"});
+          await signIn("google",{callbackUrl:"/"});
         }}
         variant="outline"
       >

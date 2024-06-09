@@ -62,12 +62,12 @@ export default function Email({
   return (
     <div className="flex h-screen min-w-full flex-col">
       <Header session={session} />
-      <div className="flex-1 bg-gray-100 p-0 dark:bg-gray-950">
+      <div className="flex-1 bg-gray-200 p-0 dark:bg-gray-950">
         <div className="grid gap-2">
           <div className="flex items-center justify-between mt-2 ml-2">
             <div className="flex flex-row">
               <div
-                className="flex items-center gap-1 bg-white px-2 rounded hover:bg-gray-300 hover:cursor-pointer mr-3"
+                className="flex items-center gap-1 bg-white px-2 rounded hover:bg-gray-300 hover:cursor-pointer mr-2"
                 onClick={() => refreshEmails()}
               >
                 <Button className="text-gray-700" size="icon" variant="ghost">
@@ -94,7 +94,7 @@ export default function Email({
               </div>
             </div>
             <div
-              className="flex items-center gap-2 bg-white px-1 md:px-2 rounded hover:bg-gray-300 hover:cursor-pointer"
+              className="flex items-center gap-2 mr-1 bg-white px-1 md:px-2 rounded hover:bg-gray-300 hover:cursor-pointer"
               onClick={() => classifyEmails()}
             >
               <Button className="text-gray-700" size="icon" variant="ghost">
@@ -103,7 +103,7 @@ export default function Email({
               Categorise
             </div>
           </div>
-          <div className="grid gap-2 min-w-sm">
+          <div className="grid gap-2 min-w-sm mx-2">
             {emails.slice(0, emailsToShow).length > 0 ? (
               emails.slice(0, emailsToShow).map((email, index) => (
                 <div
@@ -111,7 +111,7 @@ export default function Email({
                   className="grid md:grid-cols-[40px_1fr_100px] items-center gap-4 rounded-md bg-white p-3 shadow-sm transition-colors hover:bg-gray-100"
                 >
                   <div className="flex justify-between flex-row">
-                    <Avatar className="h-8 w-8 border border-gray-200">
+                    <Avatar className="h-10 w-10 border border-gray-200">
                       <AvatarImage
                         alt="@username"
                         src="/placeholder-user.jpg"
@@ -129,13 +129,7 @@ export default function Email({
                           {categories[index]}
                         </div>
                       )}
-                      {formatDate(
-                        (
-                          email.payload.headers.find(
-                            (header: any) => header.name === "Date"
-                          ) as any
-                        ).value
-                      )}
+                    
                     </div>
                   </div>
                   <div className="grid gap-1">
