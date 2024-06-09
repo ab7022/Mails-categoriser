@@ -3,18 +3,25 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import Header from "./Header";
 import { useState } from "react";
 
-export default function Email({ session, emails, refreshEmails, classifyEmails }) {
+interface EmailProps {
+  session: any;
+  emails: any[];
+  refreshEmails: () => void;
+  classifyEmails: () => void;
+}
+
+export default function Email({ session, emails, refreshEmails, classifyEmails }: EmailProps) {
   const [emailsToShow, setEmailsToShow] = useState(10);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    const options = { year: "numeric", month: "short", day: "numeric" };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
   };
 
-  const categoriesString = localStorage.getItem("categories");
-  const categoriesObject = JSON.parse(categoriesString);
-  const categories = categoriesObject?.data.split("\n").map(category => category.split(":")[1].trim());
+  const categoriesString = typeof window !== "undefined" ? localStorage.getItem("categories") : null;
+  const categoriesObject = categoriesString ? JSON.parse(categoriesString) : null;
+  const categories = categoriesObject?.data.split("\n").map((category: string) => category.split(":")[1].trim());
+
   const handleEmailsToShowChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setEmailsToShow(parseInt(event.target.value));
   };
@@ -35,46 +42,45 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
         return "bg-gray-200 text-black";
     }
   };
+
   return (
     <div className="flex h-screen min-w-full flex-col">
       <Header session={session} />
       <div className="flex-1 bg-gray-100 p-0 dark:bg-gray-950">
         <div className="grid gap-2">
           <div className="flex items-center justify-between mt-2 ml-2">
-          <div className="flex flex-row">
-            <div
-              className="flex items-center gap-2 bg-white px-2 rounded hover:bg-gray-300 hover:cursor-pointer"
-              onClick={() => refreshEmails()}
-            >
-              <Button className="text-gray-700" size="icon" variant="ghost">
-                <RefreshCwIcon className="h-5 w-5" />
-              </Button>
-              Refresh
-            </div>
-              <div className="flex items-center gap-2 bg-white px-2 rounded ml-8">
-              <label htmlFor="emailsToShow" className="text-gray-700">Show:</label>
-              <select id="emailsToShow" value={emailsToShow} onChange={handleEmailsToShowChange} className="border border-gray-300 rounded p-1">
-                {[10, 20, 30, 40, 50].map((number) => (
-                  <option key={number} value={number}>{number}</option>
-                ))}
-              </select>
-            </div>
-            </div>
-           
+            <div className="flex flex-row">
               <div
                 className="flex items-center gap-2 bg-white px-2 rounded hover:bg-gray-300 hover:cursor-pointer"
-                onClick={() => classifyEmails()}
+                onClick={() => refreshEmails()}
               >
                 <Button className="text-gray-700" size="icon" variant="ghost">
                   <RefreshCwIcon className="h-5 w-5" />
                 </Button>
-                Categorise
+                Refresh
               </div>
-            
+              <div className="flex items-center gap-2 bg-white px-2 rounded ml-8">
+                <label htmlFor="emailsToShow" className="text-gray-700">Show:</label>
+                <select id="emailsToShow" value={emailsToShow} onChange={handleEmailsToShowChange} className="border border-gray-300 rounded p-1">
+                  {[10, 20, 30, 40, 50].map((number) => (
+                    <option key={number} value={number}>{number}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div
+              className="flex items-center gap-2 bg-white px-2 rounded hover:bg-gray-300 hover:cursor-pointer"
+              onClick={() => classifyEmails()}
+            >
+              <Button className="text-gray-700" size="icon" variant="ghost">
+                <RefreshCwIcon className="h-5 w-5" />
+              </Button>
+              Categorise
+            </div>
           </div>
           <div className="grid gap-2 min-w-sm">
-          {emails.slice(0, emailsToShow).length > 0 ? (
-            emails.slice(0, emailsToShow).map((email:any, index:any) => (
+            {emails.slice(0, emailsToShow).length > 0 ? (
+              emails.slice(0, emailsToShow).map((email, index) => (
                 <div
                   key={email.id}
                   className="grid md:grid-cols-[40px_1fr_100px] items-center gap-4 rounded-md bg-white p-3 shadow-sm transition-colors hover:bg-gray-100"
@@ -85,44 +91,38 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
                       <AvatarFallback>JP</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col md:hidden text-sm text-gray-500 dark:text-gray-400 text-center">
-                    {categories && (
-                      <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
-                        {categories[index]}
+                      {categories && (
+                        <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
+                          {categories[index]}
                         </div>
-                        )}
-
-                        {formatDate((email.payload.headers.find((header: any) => header.name === "Date") as any).value)}
-
-                        </div>
-                        </div>
-                        <div className="grid gap-1">
-                        <div className="font-medium text-blue-800 ">
-
-                        {email.payload.headers.find((header: any) => header.name === "From").value}
-                        </div>
-                        <div className="text-sm text-gray-800 dark:text-gray-400">
-                        Subject: {email.payload.headers.find((header: any) => header.name === "Subject").value}
+                      )}
+                      {formatDate((email.payload.headers.find((header: any) => header.name === "Date") as any).value)}
+                    </div>
+                  </div>
+                  <div className="grid gap-1">
+                    <div className="font-medium text-blue-800">
+                      {email.payload.headers.find((header: any) => header.name === "From").value}
+                    </div>
+                    <div className="text-sm text-gray-800 dark:text-gray-400">
+                      Subject: {email.payload.headers.find((header: any) => header.name === "Subject").value}
                     </div>
                     <div className="text-[12px] md:text-sm text-gray-500 dark:text-gray-400">
                       Content: {email.snippet}
                     </div>
                   </div>
-                  {formatDate((email.payload.headers.find((header: any) => header.name === "Date") as any).value)}
+                </div>
+              ))
             ) : (
               <p className="text-center flex justify-center items-center">No emails found.</p>
             )}
           </div>
-        </div>
         </div>
       </div>
     </div>
   );
 }
 
-
-
-
-function RefreshCwIcon(props:any) {
+function RefreshCwIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
