@@ -22,9 +22,15 @@ export const NEXT_AUTH_CONFIG: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken;
-      return session;
-    },
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          accessToken: token.accessToken,
+        },
+      };
+    }
+    
   },
 
   pages: {
