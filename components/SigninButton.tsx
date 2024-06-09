@@ -19,24 +19,3 @@ export default function SigninButton() {
     </div>
   );
 }
-function GoogleIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M21.35 11.1H12v2.7h5.35c-.4 2.2-2.55 3.85-5.35 3.85a5.94 5.94 0 0 1-5.5-7.8H4.1v2.9A9.9 9.9 0 0 0 12 21c5.5 0 9.9-4.4 9.9-9.9 0-.65-.05-1.3-.15-1.95z" fill="#4285F4"/>
-        <path d="M6.5 10.7a5.93 5.93 0 0 1 0-3.3V4.5H4.1a9.9 9.9 0 0 0 0 9L6.5 10.7z" fill="#34A853"/>
-        <path d="M12 4.8a5.6 5.6 0 0 1 3.95 1.55l2.85-2.85a9.9 9.9 0 0 0-14.2 0L6.5 7.4A5.6 5.6 0 0 1 12 4.8z" fill="#FBBC05"/>
-        <path d="M12 19.2c2.7 0 5.05-1.8 5.85-4.35H12v-2.7h-5.5v3.3c.75 1.65 2.45 2.85 5.5 2.85z" fill="#EA4335"/>
-      </svg>
-    );
-  }

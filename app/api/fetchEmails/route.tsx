@@ -14,7 +14,7 @@ export async function GET(req:NextRequest, res:NextResponse) {
     
     const accessToken = token.accessToken;
 
-    const auth = new google.auth.OAuth2();
+    const auth = new google.auth.OAuth2(); 
     auth.setCredentials({ access_token: accessToken });
 
     const gmail = google.gmail({ version: "v1", auth });

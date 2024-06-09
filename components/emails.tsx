@@ -74,7 +74,7 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
           </div>
           <div className="grid gap-2 min-w-sm">
           {emails.slice(0, emailsToShow).length > 0 ? (
-            emails.slice(0, emailsToShow).map((email, index) => (
+            emails.slice(0, emailsToShow).map((email:any, index:any) => (
                 <div
                   key={email.id}
                   className="grid md:grid-cols-[40px_1fr_100px] items-center gap-4 rounded-md bg-white p-3 shadow-sm transition-colors hover:bg-gray-100"
@@ -88,20 +88,20 @@ export default function Email({ session, emails, refreshEmails, classifyEmails }
                     {categories && (
                       <div className={`text-sm p-2 shadow rounded my-2 text-center ${getCategoryClass(categories[index])}`}>
                         {categories[index]}
-                      </div>
-                    )}
-                  
-                      {formatDate(email.payload.headers.find((header) => header.name === "Date").value)}
-                     
-                    </div>
-                  </div>
-                  <div className="grid gap-1">
-                    <div className="font-medium text-blue-800 ">
-                 
-                      {email.payload.headers.find((header) => header.name === "From").value}
-                    </div>
-                    <div className="text-sm text-gray-800 dark:text-gray-400">
-                      Subject: {email.payload.headers.find((header) => header.name === "Subject").value}
+                        </div>
+                        )}
+
+                        {formatDate((email.payload.headers.find((header: any) => header.name === "Date") as any).value)}
+
+                        </div>
+                        </div>
+                        <div className="grid gap-1">
+                        <div className="font-medium text-blue-800 ">
+
+                        {email.payload.headers.find((header: any) => header.name === "From").value}
+                        </div>
+                        <div className="text-sm text-gray-800 dark:text-gray-400">
+                        Subject: {email.payload.headers.find((header: any) => header.name === "Subject").value}
                     </div>
                     <div className="text-[12px] md:text-sm text-gray-500 dark:text-gray-400">
                       Content: {email.snippet}

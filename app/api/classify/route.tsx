@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest, res: NextResponse) {
   try {
     console.log("Loading...");
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI);
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI || "");
     const body = await req.json();
     const email = body.email;
 

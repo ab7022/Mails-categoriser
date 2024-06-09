@@ -18,7 +18,7 @@ const Emails = () => {
         try {
           const response = await axios.get("/api/fetchEmails");
           setEmails(response.data);
-          const snippets = response.data.map((email) => email.snippet);
+          const snippets = response.data.map((email: any) => email.snippet);
           localStorage.setItem("emails", JSON.stringify(snippets));
         } catch (error) {
           console.error("Error fetching emails:", error);
